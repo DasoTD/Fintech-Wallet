@@ -1,0 +1,62 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:fintechdb
+    driverClassName: org.h2.Driver
+    username: sa
+    password: password
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: update
+  h2:
+    console:
+      enabled: true
+
+jwt:
+  secret: your-secure-secret-key-here
+  expiration: 86400000  # 1 day in ms
+
+logging:
+  level:
+    org.springframework: INFO
+
+stripe:
+  secret-key: sk_test_YourSecretKeyHere
+  publishable-key: pk_test_YourPublishableKeyHere
+  webhook-secret: whsec_YourWebhookSecretHere
+
+security:
+  ip-whitelist:
+    enabled: true
+    global-allow:
+      - 127.0.0.1
+      - ::1
+    paths:
+      /wallet/transfer:
+        - 192.168.1.100
+        - 10.0.0.0/8
+      /admin/**:
+        - 203.0.113.0/24
+    default-deny: false
+  geo-restriction:
+    enabled: true
+    default-allow: true
+    blocked-countries:
+      - RU
+      - IR
+      - KP
+      - SY
+    paths:
+      /wallet/transfer:
+        blocked-countries:
+          - CN
+          - IN
+      /admin/**:
+        allowed-countries:
+          - US
+          - CA
+          - GB
+    log-only: false
